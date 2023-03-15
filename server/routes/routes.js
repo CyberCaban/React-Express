@@ -4,37 +4,41 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "../storage");
+		cb(null, "./server/storage");
 	},
-	fileName: (req, file, cb) => {
-		const fileName = Date.now() + file.originalname;
-		cb(null, fileName);
+	filename: function (req, file, cb) {
+		const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+		cb(null, uniqueSuffix + "-" + file.originalname);
 	},
 });
 
 const upload = multer({
 	storage: storage,
 	fileFilter: (req, file, cb) => {
-		if (
-			file.mimetype == "image/png" ||
-			file.mimetype == "image/jpg" ||
-			file.mimetype == "image/jpeg"
-		) {
-			cb(null, true);
-		} else {
-			cb(null, false);
-			return cb(new Error());
-		}
+		// if (
+		// 	file.mimetype == "image/png" ||
+		// 	file.mimetype == "image/jpg" ||
+		// 	file.mimetype == "image/jpeg"
+		// ) {
+		// 	cb(null, true);
+		// } else {
+		// 	cb(null, false);
+		// }
+		cb(null, true);
 	},
 });
 
 const Datastore = require("nedb");
-const db = new Datastore({filename: "../data"});
+const db = new Datastore({filename: "./server/storage/data"});
 db.loadDatabase();
 
 router.post("/uploadFile", upload.single("file"), (req, res) => {
-	const url = req.protocol + "://" + req.get("host");
-	console.log(url);
+	// console.log(req.file);
+	const fileData = {
+		fileName: req.file.filename,
+		originalname: req.file.originalname,
+	};
+	db.insert(fileData);
 });
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 function UploadForm() {
 	function sendImg(fileImg) {
@@ -13,15 +14,24 @@ function UploadForm() {
 		});
 	}
 
-	function test(e) {
+	function onSubmit(e) {
 		e.preventDefault();
+		//путь к файлу внутри формы
+		// console.log(e.target[0].files[0]);
+		//отправка файла
+		const formData = new FormData();
+		formData.append("file", e.target[0].files[0]);
+		//отправка через запрос аксиос
+		axios.post("/api/uploadFile", formData, {}).then((res) => {
+			console.log(res);
+		});
 		console.log(e);
 	}
 
 	return (
 		<div>
 			<form
-				onSubmit={(e) => sendImg(e)}
+				onSubmit={(e) => onSubmit(e)}
 				encType="multipart/form-data">
 				<input
 					type="file"

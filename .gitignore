@@ -11,7 +11,7 @@
 # production
 /build
 
-/server/storage
+/server/storage/*
 
 # misc
 .DS_Store

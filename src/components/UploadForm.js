@@ -1,18 +1,13 @@
 import React from "react";
 import axios from "axios";
+import {useState, useEffect} from "react";
 
 function UploadForm() {
-	function sendImg(fileImg) {
-		fetch("/api/uploadFile", {
-			method: "POST",
-			headers: {
-				"Content-Type": "multipart/form-data",
-			},
-			body: fileImg,
-		}).then((res) => {
-			console.log("Success" + res.body);
-		});
-	}
+	const [files, setFiles] = useState([]);
+
+	useEffect(() => {
+		console.log(files);
+	}, [files]);
 
 	function onSubmit(e) {
 		e.preventDefault();
@@ -23,9 +18,9 @@ function UploadForm() {
 		formData.append("file", e.target[0].files[0]);
 		//отправка через запрос аксиос
 		axios.post("/api/uploadFile", formData, {}).then((res) => {
-			console.log(res);
+			setFiles(res.data);
+			// console.log(res);
 		});
-		console.log(e);
 	}
 
 	return (

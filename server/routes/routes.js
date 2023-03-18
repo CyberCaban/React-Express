@@ -33,12 +33,19 @@ const db = new Datastore({filename: "./server/storage/data"});
 db.loadDatabase();
 
 router.post("/uploadFile", upload.single("file"), (req, res) => {
-	// console.log(req.file);
 	const fileData = {
 		fileName: req.file.filename,
-		originalname: req.file.originalname,
 	};
 	db.insert(fileData);
+	db.find({}, function (err, docs) {
+		res.send(docs);
+	});
+});
+
+router.post("/getFileList", (req, res) => {
+	db.find({}, function (err, docs) {
+		res.send(docs);
+	});
 });
 
 module.exports = router;

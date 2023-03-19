@@ -2,6 +2,6 @@
 # Установка
 `npm i`\
 `npm run b`\
-`npm run dev`\
+`npm run dev`
 
 `localhost:3000`

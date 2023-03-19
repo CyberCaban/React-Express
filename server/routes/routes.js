@@ -4,7 +4,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "./server/storage");
+		cb(null, "./build/static/media");
 	},
 	filename: function (req, file, cb) {
 		const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -29,7 +29,7 @@ const upload = multer({
 });
 
 const Datastore = require("nedb");
-const db = new Datastore({filename: "./server/storage/data"});
+const db = new Datastore({filename: "./server/data"});
 db.loadDatabase();
 
 router.post("/uploadFile", upload.single("file"), (req, res) => {
